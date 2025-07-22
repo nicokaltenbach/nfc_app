@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     component: HomePage
   },
   {
-    path: '/detail/:tag',  // Neue Route für die Detailseite
+    path: '/detail',  // Neue Route für die Detailseite
     name: 'Detail',
     component: Detail,
     props: true
