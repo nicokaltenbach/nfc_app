@@ -3,7 +3,7 @@
     <ion-header translucent>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" />
+          <ion-back-button default-href="/nfc-scan" />
         </ion-buttons>
         <ion-title>Tag Details</ion-title>
       </ion-toolbar>
@@ -21,18 +21,22 @@
       <div v-else>
         <p>Keine Tag-Daten vorhanden.</p>
       </div>
+      <ion-button expand="block" color="medium" @click="goBack">
+        Zurück zur Startseite
+      </ion-button>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Clipboard } from '@capacitor/clipboard';
 import { Share } from '@capacitor/share';
 import { NfcUtils } from '@capawesome-team/capacitor-nfc';
 
 const route = useRoute();
+const router = useRouter();
 const tag = ref<any>(null);
 const utils = new NfcUtils();
 
@@ -63,4 +67,13 @@ const sharePayload = async () => {
     text: payloadText,
   });
 };
+
+const goBack = () => {
+  if (window.history.length > 1) {
+    router.back();
+  } else {
+    router.push('/nfc-scan'); // Fallback-Route anpassen
+  }
+};
+
 </script>

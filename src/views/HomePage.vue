@@ -24,6 +24,12 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Nfc, NfcUtils } from '@capawesome-team/capacitor-nfc';
+import { onMounted } from 'vue';
+
+onMounted(async () => {
+  await Nfc.stopScanSession();
+  await clearListeners();
+});
 
 const scanning = ref(false);
 const router = useRouter();
@@ -46,7 +52,6 @@ const startRead = async () => {
   if (!(await checkNfcStatus())) return;
 
   scanning.value = true;
-
   await clearListeners();
 
   Nfc.addListener('nfcTagScanned', async (event) => {
