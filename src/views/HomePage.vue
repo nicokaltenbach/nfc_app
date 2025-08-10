@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { Nfc, NfcUtils } from '@capawesome-team/capacitor-nfc';
+import { Nfc, NfcUtils, NfcTag} from '@capawesome-team/capacitor-nfc';
 import { onMounted } from 'vue';
 
 onMounted(async () => {
@@ -49,25 +49,26 @@ const clearListeners = async () => {
 };
 
 const startRead = async () => {
-  if (!(await checkNfcStatus())) return;
+  if (!(await checkNfcStatus()) || scanning.value) return;
 
   scanning.value = true;
   await clearListeners();
 
-  Nfc.addListener('nfcTagScanned', async (event) => {
+  const onTagScanned = async (event: { nfcTag: NfcTag }) => {
     scanning.value = false;
     await Nfc.stopScanSession();
     await clearListeners();
 
     // Navigiere zur Detailseite mit Tag-Daten als JSON stringified
     router.push({ name: 'Detail', params: { tag: JSON.stringify(event.nfcTag) } });
-  });
+  };
 
+  Nfc.addListener('nfcTagScanned', onTagScanned);
   await Nfc.startScanSession();
 };
 
 const startWrite = async () => {
-  if (!(await checkNfcStatus())) return;
+  if (!(await checkNfcStatus()) || scanning.value) return;
 
   const textToWrite = prompt('Bitte Text eingeben, der auf den Tag geschrieben werden soll:', 'Hallo NFC');
   if (!textToWrite) return;
@@ -79,7 +80,7 @@ const startWrite = async () => {
   const utils = new NfcUtils();
   const { record } = utils.createNdefTextRecord({ text: textToWrite });
 
-  Nfc.addListener('nfcTagScanned', async () => {
+  const onTagScanned = async () => {
     try {
       await Nfc.write({ message: { records: [record] } });
       alert('Schreiben erfolgreich!');
@@ -89,8 +90,8 @@ const startWrite = async () => {
     scanning.value = false;
     await Nfc.stopScanSession();
     await clearListeners();
-  });
-
+  }
+  Nfc.addListener('nfcTagScanned', onTagScanned);
   await Nfc.startScanSession();
 };
 
