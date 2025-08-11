@@ -9,6 +9,7 @@
     <ion-content fullscreen class="ion-padding">
       <ion-button expand="block" @click="startRead">Lesen starten</ion-button>
       <ion-button expand="block" @click="startWrite">Schreiben starten</ion-button>
+      <ion-button expand="block" @click="startTest">Test starten</ion-button>
 
       <ion-modal :is-open="scanning" backdrop-dismiss="false">
         <ion-content class="ion-padding ion-text-center">
@@ -51,21 +52,35 @@ const clearListeners = async () => {
 const startRead = async () => {
   if (!(await checkNfcStatus()) || scanning.value) return;
 
+  console.log("Lese NFC...");
   scanning.value = true;
   await clearListeners();
 
   const onTagScanned = async (event: { nfcTag: NfcTag }) => {
     scanning.value = false;
+    console.log("ABCD Scanne NFC...");
     await Nfc.stopScanSession();
     await clearListeners();
 
     // Navigiere zur Detailseite mit Tag-Daten als JSON stringified
-    router.push({ name: 'Detail', params: { tag: JSON.stringify(event.nfcTag) } });
-  };
+    console.log("Navigiere zur Detailseite..." + JSON.stringify(event.nfcTag));
+    await router.push({
+    name: 'Detail',
+    query: { tag: JSON.stringify(event.nfcTag) }
+    });
+};
 
   Nfc.addListener('nfcTagScanned', onTagScanned);
   await Nfc.startScanSession();
 };
+
+const startTest = async () => {
+ 
+    // Navigiere zur Detailseite mit Tag-Daten als JSON stringified
+console.log("Vor router.push");
+await router.push({ name: 'Detail', query: { tag: "{}" } });
+console.log("Nach router.push");
+  };
 
 const startWrite = async () => {
   if (!(await checkNfcStatus()) || scanning.value) return;

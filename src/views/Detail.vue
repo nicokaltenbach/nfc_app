@@ -14,6 +14,7 @@
         <p><strong>ID:</strong> {{ tag.id }}</p>
         <p><strong>Writable:</strong> {{ tag.isWritable }}</p>
         <p><strong>Payload:</strong> {{ payloadText }}</p>
+        <p><strong>Hex:</strong> {{ utils.convertBytesToHex(utils.convertStringToBytes({text: payloadText})).hex }}</p>
 
         <ion-button expand="block" @click="copyPayload">Payload kopieren</ion-button>
         <ion-button expand="block" @click="sharePayload">Payload teilen</ion-button>
@@ -33,26 +34,25 @@ import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Clipboard } from '@capacitor/clipboard';
 import { Share } from '@capacitor/share';
-import { NfcUtils } from '@capawesome-team/capacitor-nfc';
+import { NfcTag, NfcUtils } from '@capawesome-team/capacitor-nfc';
 
 const route = useRoute();
 const router = useRouter();
-const tag = ref<any>(null);
+let tag = null as NfcTag | null;
 const utils = new NfcUtils();
 
-if (route.params.tag) {
+if (route.query.tag) {
   try {
-    tag.value = JSON.parse(route.params.tag as string);
+    console.log("Tag-Daten empfangen: ", route.query.tag);
+    tag = JSON.parse(route.query.tag as string);
   } catch {
-    tag.value = null;
+    tag = null;
   }
 }
 
 // NDEF-Record mit Payload (erster Record)
-const payloadRecord = tag.value?.ndefMessage?.[0];
-const payloadText = payloadRecord?.payload
-  ? new TextDecoder().decode(payloadRecord.payload)
-  : '';
+const payloadRecord = tag?.message?.records?.[0];
+const payloadText = payloadRecord && utils.getTextFromNdefTextRecord({record: payloadRecord})?.text || "";
 
 const copyPayload = async () => {
   if (!payloadText) return;

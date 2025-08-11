@@ -17,7 +17,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/detail',  // Neue Route für die Detailseite
     name: 'Detail',
     component: Detail,
-    props: true
   }
 ]
 
