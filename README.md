@@ -35,15 +35,6 @@ npm config set //npm.registry.capawesome.io/:_authToken <DEIN_LIZENZSCHLÜSSEL>
 ```bash
 npm run dev
 ```
-
-Or, if the Ionic CLI is installed:
-
-```bash
-ionic serve
-```
-
-> This is just for UI development; microphone plugins won’t work in a plain browser.
-
 ---
 
 ## 4) Android: First-Time Setup
