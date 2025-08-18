@@ -5,11 +5,9 @@
         <ion-title>NFC Scanner</ion-title>
       </ion-toolbar>
     </ion-header>
-
     <ion-content fullscreen class="ion-padding">
       <ion-button expand="block" @click="startRead">Lesen starten</ion-button>
       <ion-button expand="block" @click="startWrite">Schreiben starten</ion-button>
-
       <ion-modal :is-open="scanning" backdrop-dismiss="false">
         <ion-content class="ion-padding ion-text-center">
           <p>NFC Scan läuft...</p>
@@ -33,7 +31,6 @@ onMounted(async () => {
 
 const scanning = ref(false);
 const router = useRouter();
-
 const checkNfcStatus = async (): Promise<boolean> => {
   const { isEnabled } = await Nfc.isEnabled();
   if (!isEnabled) {
@@ -50,15 +47,12 @@ const clearListeners = async () => {
 
 const startRead = async () => {
   if (!(await checkNfcStatus()) || scanning.value) return;
-
   scanning.value = true;
   await clearListeners();
-
   const onTagScanned = async (event: { nfcTag: NfcTag }) => {
     scanning.value = false;
     await Nfc.stopScanSession();
     await clearListeners();
-
     // Navigiere zur Detailseite mit Tag-Daten als JSON stringified
     await router.push({
     name: 'Detail',
@@ -72,17 +66,12 @@ const startRead = async () => {
 
 const startWrite = async () => {
   if (!(await checkNfcStatus()) || scanning.value) return;
-
   const textToWrite = prompt('Bitte Text eingeben, der auf den Tag geschrieben werden soll:', 'Hallo NFC');
   if (!textToWrite) return;
-
   scanning.value = true;
-
   await clearListeners();
-
   const utils = new NfcUtils();
   const { record } = utils.createNdefTextRecord({ text: textToWrite });
-
   const onTagScanned = async () => {
     try {
       await Nfc.write({ message: { records: [record] } });

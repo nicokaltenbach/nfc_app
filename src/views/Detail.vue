@@ -8,14 +8,12 @@
         <ion-title>Tag Details</ion-title>
       </ion-toolbar>
     </ion-header>
-
     <ion-content class="ion-padding">
       <div v-if="tag">
         <p><strong>ID:</strong> {{ tag.id }}</p>
         <p><strong>Writable:</strong> {{ tag.isWritable }}</p>
         <p><strong>Payload:</strong> {{ payloadText }}</p>
         <p><strong>Hex:</strong> {{ utils.convertBytesToHex(utils.convertStringToBytes({text: payloadText})).hex }}</p>
-
         <ion-button expand="block" @click="copyPayload">Payload kopieren</ion-button>
         <ion-button expand="block" @click="sharePayload">Payload teilen</ion-button>
       </div>
@@ -53,7 +51,6 @@ if (route.query.tag) {
 // NDEF-Record mit Payload (erster Record)
 const payloadRecord = tag?.message?.records?.[0];
 const payloadText = payloadRecord && utils.getTextFromNdefTextRecord({record: payloadRecord})?.text || "";
-
 const copyPayload = async () => {
   if (!payloadText) return;
   await Clipboard.write({ string: payloadText });
@@ -75,5 +72,4 @@ const goBack = () => {
     router.push('/nfc-scan'); // Fallback-Route anpassen
   }
 };
-
 </script>
