@@ -37,7 +37,7 @@ npm run dev
 ```
 ---
 
-## 4) Android: First-Time Setup
+## 4) Android Setup
 
 Add the Android platform and sync:
 
