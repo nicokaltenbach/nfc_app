@@ -1,6 +1,6 @@
 # nfc_app
 
-A simple Ionic/Capacitor app for NFC-TAG Scanning on Android.
+A Ionic/Capacitor app for NFC-TAG Scanning on Android.
 
 ---
 
@@ -12,7 +12,8 @@ A simple Ionic/Capacitor app for NFC-TAG Scanning on Android.
 | npm | 9+ | `npm -v` |
 | Git | — | `git --version` |
 | Android Studio | 2023+ | Includes Android SDK + Platform Tools (ADB) |
-| Java JDK | 17 | Installed via Android Studio is fine |
+| Java JDK | 17 | Installed via Android Studio |
+| Ionic CLI (optional) | latest | `npm i -g @ionic/cli` |
 
 ---
 
@@ -22,6 +23,7 @@ A simple Ionic/Capacitor app for NFC-TAG Scanning on Android.
 git clone https://github.com/nicokaltenbach/nfc_app.git
 cd nfc_app
 npm install
+
 ```bash
 Lizenzschlüssel einrichten:
 npm config set @capawesome-team:registry https://npm.registry.capawesome.io/
@@ -30,7 +32,7 @@ npm config set //npm.registry.capawesome.io/:_authToken <DEIN_LIZENZSCHLÜSSEL>
 
 ---
 
-## 3) Run in the Browser (Dev Only)
+## 3) Run in the Browser (Dev)
 
 ```bash
 npm run dev
@@ -54,7 +56,7 @@ npx cap open android
 ```
 
 In Android Studio:
-- Select an **emulator** or **physical device**
+- Select an emulator or physical device
 - Click **Run**
 
 ---
