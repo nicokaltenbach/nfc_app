@@ -45,7 +45,7 @@ Add the Android platform and sync:
 
 ```bash
 npm run build
-npx cap add android   # only once
+npx cap add android
 npx cap sync android
 ```
 
@@ -57,7 +57,7 @@ npx cap open android
 
 In Android Studio:
 - Select an emulator or physical device
-- Click **Run**
+- Click Run
 
 ---
 
