@@ -22,9 +22,14 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Nfc, NfcUtils, NfcTag} from '@capawesome-team/capacitor-nfc';
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 
 onMounted(async () => {
+  await Nfc.stopScanSession();
+  await clearListeners();
+});
+
+onUnmounted(async () => {
   await Nfc.stopScanSession();
   await clearListeners();
 });
